@@ -2,17 +2,18 @@
 
 // module LocalStorage
 
-exports.get = function (key) {
+exports.getImpl = function (key) {
   return function () {
     return window.localStorage.getItem(key);
   };
 };
 
-exports.set = function (key) {
+exports.setImpl = function (key) {
   return function (value) {
     return function () {
-      window.localStorage.setItem(key, val);
+      window.localStorage.setItem(key, value);
       return {};
     };
   };
 };
+
