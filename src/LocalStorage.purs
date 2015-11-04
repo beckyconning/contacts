@@ -2,7 +2,6 @@ module LocalStorage where
 
 import Prelude
 
-import Debug.Trace
 import Data.Argonaut.Core (Json())
 import Control.Bind ((>=>))
 import Control.Monad.Eff (Eff())
@@ -19,7 +18,7 @@ rightToMaybe :: forall a b. Either a b -> Maybe b
 rightToMaybe = either (const Nothing) Just
 
 get :: forall eff a. (DecodeJson a) => String -> Eff (localStorage :: LOCALSTORAGE | eff) (Maybe a)
-get key = getImpl key >>= jsonParser >>> (rightToMaybe >=> decodeMaybe) >>> f >>> pure
+get key = getImpl key >>= jsonParser >>> (rightToMaybe >=> decodeMaybe) >>> pure
 
 set :: forall eff a. (EncodeJson a) => String -> a -> Eff (localStorage :: LOCALSTORAGE | eff) Unit
 set key = encodeJson >>> printJson >>> setImpl key
@@ -27,5 +26,3 @@ set key = encodeJson >>> printJson >>> setImpl key
 foreign import getImpl :: forall eff. String -> (Eff (localStorage :: LOCALSTORAGE | eff) String)
 
 foreign import setImpl :: forall eff. String -> String -> (Eff (localStorage :: LOCALSTORAGE | eff) Unit)
-
-f x = traceAny x \_ -> x
